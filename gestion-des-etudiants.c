@@ -25,12 +25,13 @@ typedef struct {
 } Etudiant;
 
 Etudiant etudiants[99] = {
-    {1, "Dupont", "Marie", "Mathematiques", 12.5, {10, 6, 1998}},
-    {2, "Martin", "Jean", "Informatique", 10.0, {23, 11, 1999}},
-    {3, "Durand", "Sophie", "Physique", 8.3, {5, 2, 2000}},
+    {1, "Dupont", "Marie", "Mathematiques", 12, {10, 6, 1998}},
+    {2, "Martin", "Jean", "Informatique", 10, {23, 11, 1999}},
+    {3, "Durand", "Sophie", "Physique", 8, {5, 2, 2000}},
     {4, "Lemoine", "Paul", "Chimie", 9.2, {15, 8, 1997}},
     {5, "Moreau", "Claire", "Biologie", 16.9, {30, 12, 1999}}
 };
+
 int taille = 5;
 static int id_increment = 6;
 
@@ -72,11 +73,18 @@ void statistiques();
 void rechercherParNom();
 // recherche par departement (etudiant inscris dans un departement specifique)
 void rechercherParDepartement();
-
 void rechercherEtudiant();
+// sous menu des choix de tri
+void menuDeTri();
 // tri alphabetique des etudiants (de A a Z ou de Z a A) 
+void triEtudiantParNomDesc();
+void triEtudiantParNomAsc();
 // tri les etudiant par la moyenne generale (asc et desc)
+void triEtudiantParNoteAsc();
+void triEtudiantParNoteDesc();
 // tri les etudiant avec leur statu de reussite (moyenne superieure ou egale 10/20) 
+void triEtudiantSelonStatusDeReussit();
+
 void triEtudiants();
 
 // prototype des fonctions auxiliere (helpers functions)
@@ -106,7 +114,8 @@ void menu(){
         printf("\t 3- rechercher un etudiant \n");
         printf("\t 4- afficher les informations des etudiants \n");
         printf("\t 5- statistiques \n");
-        printf("\t 6- quittez le programe \n\n");
+        printf("\t 6- trie les etudiants \n");
+        printf("\t 7- quittez le programe \n\n");
         printf("--------------------------------------------------------------\n" COLOR_RESET);
         printf("entrez votre choix: "); scanf("%d", &choice);
         printf(COLOR_YELLOW "--------------------------------------------------------------\n" COLOR_RESET);
@@ -117,7 +126,8 @@ void menu(){
             case 3: rechercherEtudiant(); break;
             case 4: afficherListEtudiants(); break;
             case 5: statistiques(); break;
-            case 6: 
+            case 6: menuDeTri(); break;
+            case 7: 
                 exit(0); 
                 break;
             default:
@@ -125,7 +135,7 @@ void menu(){
                 break;
         }
     }
-    while(choice != 6);
+    while(choice != 7);
 }
 
 //  *************************** //
@@ -227,27 +237,18 @@ void supprimerEtudiant(){
     }
 }
 void afficherInfosEtudiants(Etudiant tableau[], int size){
-    printf(COLOR_YELLOW "--------------------------------------------------------------\n");
-    printf("                     list des etudiants                       \n");
-    printf("--------------------------------------------------------------\n" COLOR_RESET);
-    if(size == 0){
-        printf(COLOR_RED "aucun etudiant a ete trouvee\n" COLOR_RESET);
-        return;
-    }
-    else{
-        // printf(COLOR_GREEN "%d etudiant trouvee \n" COLOR_RESET, size);
+    // printf(COLOR_GREEN "%d etudiant trouvee \n" COLOR_RESET, size);
+    printf(COLOR_VIOLET "--------------------------------------------------------------\n" COLOR_RESET);
+    for(int i=0; i<size; i++){
+        printf(COLOR_VIOLET "etudiant avec l'identifiant %d \n" COLOR_RESET, tableau[i].uid);
+        printf("    nom: %s\n", tableau[i].nom);
+        printf("    prenom: %s\n", tableau[i].prenom);
+        printf("    date de naissance: %d/%d/%d \n", tableau[i].date_naiss.jour, tableau[i].date_naiss.mois, tableau[i].date_naiss.annee);
+        printf("    departement: %s \n", tableau[i].departement);
+        printf("    note general: %.2f \n", tableau[i].noteGeneral);
         printf(COLOR_VIOLET "--------------------------------------------------------------\n" COLOR_RESET);
-        for(int i=0; i<size; i++){
-            printf(COLOR_VIOLET "etudiant avec l'identifiant %d \n" COLOR_RESET, tableau[i].uid);
-            printf("    nom: %s\n", tableau[i].nom);
-            printf("    prenom: %s\n", tableau[i].prenom);
-            printf("    date de naissance: %d/%d/%d \n", tableau[i].date_naiss.jour, tableau[i].date_naiss.mois, tableau[i].date_naiss.annee);
-            printf("    departement: %s \n", tableau[i].departement);
-            printf("    note general: %.2f \n", tableau[i].noteGeneral);
-            printf(COLOR_VIOLET "--------------------------------------------------------------\n" COLOR_RESET);
-        }
-        return;
     }
+    return;
 }
 void moyenneGeneral(){}
 void statistiques(){
@@ -487,7 +488,18 @@ void etudiantParNoteGeneral(){
     printf("les etudiant ayant une note superieure a la seuille %.2f\n", seuil);
     afficherInfosEtudiants(tmp_etudiants, counter);
 }
-void troisPremiersEtudiant(){}
+void troisPremiersEtudiant(){
+    triEtudiantParNoteAsc();
+    for(int i=0; i<3; i++){
+        tmp_etudiants[i] = etudiants[i];
+    }
+    system("cls");
+    printf(COLOR_YELLOW "--------------------------------------------------------------\n");
+    printf("                     list des etudiants                       \n");
+    printf("--------------------------------------------------------------\n");
+    printf("les trois etudiant ayant la premiere note.\n" COLOR_RESET);
+    afficherInfosEtudiants(tmp_etudiants, 3);
+}
 void etudiantReussits(){
     int counter = 0;
     for(int i=0; i<taille; i++){
@@ -504,8 +516,143 @@ void etudiantReussits(){
     afficherInfosEtudiants(tmp_etudiants, counter);
 }
 
+Etudiant tmp;
 
+void menuDeTri(){
+    system("cls");
+    printf(COLOR_YELLOW "--------------------------------------------------------------\n");
+    printf("                     trie les etudiants                       \n");
+    printf("--------------------------------------------------------------\n" COLOR_RESET);
+    if(taille == 0){
+        printf(COLOR_RED "aucun etudiant availaible maintenant\n" COLOR_RESET);
+        return;
+    }
+    else{
+        int tri_choix;
+        do{
+            printf(COLOR_YELLOW "--------------------------------------------------------------\n");
+            printf("1- afficher les etudiant par nom en ordre croissant. \n");
+            printf("2- afficher les etudiant par nom en ordre decroissant. \n");
+            printf("3- afficher les etudiant par note en ordre decroissant. \n");
+            printf("4- afficher les etudiant par note en ordre croissant. \n");
+            printf("5- afficher les etudiant selon le status de reussite. \n");
+            printf("6- retour au menu principale\n");
+            printf("--------------------------------------------------------------\n" COLOR_RESET);
+            printf("entrer votre choix: "); scanf("%d", &tri_choix);
 
+            switch(tri_choix){
+                case 1: triEtudiantParNomAsc(); break;
+                case 2: triEtudiantParNomDesc(); break;
+                case 3: triEtudiantParNoteAsc(); break;
+                case 4: triEtudiantParNoteDesc(); break;
+                case 5: triEtudiantSelonStatusDeReussit(); break;
+                case 6: return; break;
+                default: 
+                    printf(COLOR_RED "choisit un choix valid.\n" COLOR_RESET);
+                    break;
+            }
+        }
+        while(tri_choix != 6);
+    }
+}
 
+void triEtudiantParNoteDesc(){
+    for (int i = 0; i < taille - 1; i++) {
+        for (int j = 0; j < taille - i - 1; j++) {
+            if (etudiants[j].noteGeneral > etudiants[j + 1].noteGeneral) {
+                // Échange des éléments
+                tmp_etudiants[0] = etudiants[j];
+                etudiants[j] = etudiants[j + 1];
+                etudiants[j + 1] = tmp_etudiants[0];
+            }
+        }
+    }
+    system("cls");
+    printf(COLOR_YELLOW "--------------------------------------------------------------\n");
+    printf("                     list des etudiants                       \n");
+    printf("--------------------------------------------------------------\n" COLOR_RESET);
+    printf("list trie par ordre croissant de note general\n");
+    afficherInfosEtudiants(etudiants, taille);
+}
+void triEtudiantParNoteAsc(){
+    for (int i = 0; i < taille - 1; i++) {
+        for (int j = 0; j < taille - i - 1; j++) {
+            if (etudiants[j].noteGeneral < etudiants[j + 1].noteGeneral) {
+                // Échange des éléments
+                tmp_etudiants[0] = etudiants[j];
+                etudiants[j] = etudiants[j + 1];
+                etudiants[j + 1] = tmp_etudiants[0];
+            }
+        }
+    }
+    system("cls");
+    printf(COLOR_YELLOW "--------------------------------------------------------------\n");
+    printf("                     list des etudiants                       \n");
+    printf("--------------------------------------------------------------\n");
+    printf("list trie par ordre decroissant de note general\n" COLOR_RESET);
+    afficherInfosEtudiants(etudiants, taille);
+}
 
+void triEtudiantParNomDesc(){
+    for (int i = 0; i < taille - 1; i++) {
+        for (int j = 0; j < taille - i - 1; j++) {
+            if (strcmp(etudiants[j].nom, etudiants[j + 1].nom) > 0) {
+                // Échange des éléments
+                tmp_etudiants[0] = etudiants[j];
+                etudiants[j] = etudiants[j + 1];
+                etudiants[j + 1] = tmp_etudiants[0];
+            }
+        }
+    }
+    system("cls");
+    printf(COLOR_YELLOW "--------------------------------------------------------------\n");
+    printf("                     list des etudiants                       \n");
+    printf("--------------------------------------------------------------\n" COLOR_RESET);
+    printf("list trie par ordre croissant de note general\n");
+    afficherInfosEtudiants(etudiants, taille);
+}
+void triEtudiantParNomAsc(){
+    for (int i = 0; i < taille - 1; i++) {
+        for (int j = 0; j < taille - i - 1; j++) {
+            if (strcmp(etudiants[j].nom, etudiants[j + 1].nom) < 0) {
+                // Échange des éléments
+                tmp_etudiants[0] = etudiants[j];
+                etudiants[j] = etudiants[j + 1];
+                etudiants[j + 1] = tmp_etudiants[0];
+            }
+        }
+    }
+    system("cls");
+    printf(COLOR_YELLOW "--------------------------------------------------------------\n");
+    printf("                     list des etudiants                       \n");
+    printf("--------------------------------------------------------------\n");
+    printf("list trie par ordre decroissant de note general\n" COLOR_RESET);
+    afficherInfosEtudiants(etudiants, taille);
+}
+
+void triEtudiantSelonStatusDeReussit(){
+    int counter = 0;
+    for(int i=0; i<taille; i++){
+        if(etudiants[i].noteGeneral >= 10){
+            tmp_etudiants[counter] = etudiants[i];
+            counter++;
+        }
+    }
+    Etudiant tmp;
+    for (int i = 0; i < counter - 1; i++) {
+        for (int j = 0; j < counter - i - 1; j++) {
+            if (tmp_etudiants[j].noteGeneral < tmp_etudiants[j + 1].noteGeneral) {
+                tmp = tmp_etudiants[j];
+                tmp_etudiants[j] = tmp_etudiants[j + 1];
+                tmp_etudiants[j + 1] = tmp;
+            }
+        }
+    }
+    system("cls");
+    printf(COLOR_YELLOW "--------------------------------------------------------------\n");
+    printf("                     list des etudiants                       \n");
+    printf("--------------------------------------------------------------\n");
+    printf("list trie selon le status de reussit\n" COLOR_RESET);
+    afficherInfosEtudiants(tmp_etudiants, counter);
+}
 
