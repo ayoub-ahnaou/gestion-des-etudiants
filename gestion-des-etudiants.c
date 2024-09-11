@@ -463,6 +463,10 @@ void rechercherParNom(){
             counter++;
         }
     }
+    if(counter == 0){
+        printf(COLOR_RED "aucun etudiant availaible sous ce le nom '%s'\n" COLOR_RESET, nom);
+        return;
+    }
     afficherInfosEtudiants(tmp_etudiants, counter);
 }
 void rechercherParDepartement(){
@@ -595,6 +599,7 @@ void menuDeTri(){
     }
 }
 
+// tri decroissant de 20 jusqu'a 0
 void triEtudiantParNoteDesc(){
     for (int i = 0; i < taille - 1; i++) {
         for (int j = 0; j < taille - i - 1; j++) {
@@ -610,9 +615,10 @@ void triEtudiantParNoteDesc(){
     printf(COLOR_YELLOW "--------------------------------------------------------------\n");
     printf("                     list des etudiants                       \n");
     printf("--------------------------------------------------------------\n" COLOR_RESET);
-    printf("list trie par ordre croissant de note general\n");
+    printf("list trie par ordre decroissant de note general\n");
     afficherInfosEtudiants(etudiants, taille);
 }
+// tri croissant de 0 jusqu'a 20
 void triEtudiantParNoteAsc(){
     for (int i = 0; i < taille - 1; i++) {
         for (int j = 0; j < taille - i - 1; j++) {
@@ -628,10 +634,11 @@ void triEtudiantParNoteAsc(){
     printf(COLOR_YELLOW "--------------------------------------------------------------\n");
     printf("                     list des etudiants                       \n");
     printf("--------------------------------------------------------------\n");
-    printf("list trie par ordre decroissant de note general\n" COLOR_RESET);
+    printf("list trie par ordre croissant de note general\n" COLOR_RESET);
     afficherInfosEtudiants(etudiants, taille);
 }
 
+// tri decroissant de Z jusqu'a A
 void triEtudiantParNomDesc(){
     for (int i = 0; i < taille - 1; i++) {
         for (int j = 0; j < taille - i - 1; j++) {
@@ -647,9 +654,10 @@ void triEtudiantParNomDesc(){
     printf(COLOR_YELLOW "--------------------------------------------------------------\n");
     printf("                     list des etudiants                       \n");
     printf("--------------------------------------------------------------\n" COLOR_RESET);
-    printf("list trie par ordre croissant de note general\n");
+    printf("list trie par ordre decroissant de nom\n");
     afficherInfosEtudiants(etudiants, taille);
 }
+// tri decroissant de A jusqu'a Z
 void triEtudiantParNomAsc(){
     for (int i = 0; i < taille - 1; i++) {
         for (int j = 0; j < taille - i - 1; j++) {
@@ -665,10 +673,11 @@ void triEtudiantParNomAsc(){
     printf(COLOR_YELLOW "--------------------------------------------------------------\n");
     printf("                     list des etudiants                       \n");
     printf("--------------------------------------------------------------\n");
-    printf("list trie par ordre decroissant de note general\n" COLOR_RESET);
+    printf("list trie par ordre croissant de nom\n" COLOR_RESET);
     afficherInfosEtudiants(etudiants, taille);
 }
 
+// tri etudiant on ordre decroissant de 20 jusqu'a 10
 void triEtudiantSelonStatusDeReussit(){
     int counter = 0;
     for(int i=0; i<taille; i++){
