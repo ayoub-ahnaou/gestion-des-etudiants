@@ -46,14 +46,15 @@ void afficherInfosEtudiants(Etudiant tableau[], int size);
 // calculer et afficher la moyenne generale de chaque departement, ainsi de l'universite entière
 void moyenneGeneral();
 // afficher:
+void afficherListEtudiants();
 // le nombre total d'etudiants inscrits
-// void etudiantInscris();
+void etudiantInscris();
 // nombre d'etudiant dans chaque departement
-// void etudiantDansChaqueDepartement();
+void etudiantDansChaqueDepartement();
 // les etudiants ayant une moyenne generale superieure a un certain seuil
-// void etudiantParNoteGeneral();
+void etudiantParNoteGeneral();
 // les trois etudiant ayant la premiere note
-// void troisPremiersEtudiant();
+void troisPremiersEtudiant();
 // nombre d'etudiant ayant reussi dans chaque departement (note >= 10/20)
 void statistiques();
 // rechercher un etudiant par son nom
@@ -103,9 +104,11 @@ void menu(){
             case 1: ajouterEtudiant(); break;
             case 2: modifierOuSupprimer(); break;
             case 3: rechercherEtudiant(); break;
-            case 4: break;
+            case 4: afficherListEtudiants(); break;
             case 5: break;
-            case 6: exit(0); break;
+            case 6: 
+                exit(0); 
+                break;
             default:
                 printf(COLOR_RED "choisit un choix valide dans le menu principale\n" COLOR_RESET);
                 break;
@@ -226,11 +229,11 @@ void afficherInfosEtudiants(Etudiant tableau[], int size){
         printf(COLOR_VIOLET "--------------------------------------------------------------\n" COLOR_RESET);
         for(int i=0; i<size; i++){
             printf(COLOR_VIOLET "etudiant avec l'identifiant %d \n" COLOR_RESET, tableau[i].uid);
-            printf("nom: %s\n", tableau[i].nom);
-            printf("prenom: %s\n", tableau[i].prenom);
-            printf("date de naissance: %d/%d/%d \n", tableau[i].date_naiss.jour, tableau[i].date_naiss.mois, tableau[i].date_naiss.annee);
-            printf("departement: %s \n", tableau[i].departement);
-            printf("note general: %.2f \n", tableau[i].noteGeneral);
+            printf("\t nom: %s\n", tableau[i].nom);
+            printf("\t prenom: %s\n", tableau[i].prenom);
+            printf("\t date de naissance: %d/%d/%d \n", tableau[i].date_naiss.jour, tableau[i].date_naiss.mois, tableau[i].date_naiss.annee);
+            printf("\t departement: %s \n", tableau[i].departement);
+            printf("\t note general: %.2f \n", tableau[i].noteGeneral);
             printf(COLOR_VIOLET "--------------------------------------------------------------\n" COLOR_RESET);
         }
         return;
@@ -271,7 +274,7 @@ void rechercherEtudiant(){
 }
 void triEtudiants(){}
 
-// ********************* //
+// **************************** //
 
 void insertDepartement(int indice){
     printf("--------------------------------------------------------------\n");
@@ -318,16 +321,16 @@ void modifierOuSupprimer(){
     printf(COLOR_YELLOW "--------------------------------------------------------------\n");
     printf("             supprimer ou modifier un etudiant                \n");
     printf("--------------------------------------------------------------\n");
-    int del_or_upd;
+    int suppression_choix;
     do{
         printf(COLOR_YELLOW "--------------------------------------------------------------\n");
         printf("1- modifier un etudiant\n");
         printf("2- supprimer un etudiant\n");
         printf("3- retour au menu principale\n");
         printf("--------------------------------------------------------------\n" COLOR_RESET);
-        printf("entrer votre choix: "); scanf("%d", &del_or_upd);
+        printf("entrer votre choix: "); scanf("%d", &suppression_choix);
 
-        switch(del_or_upd){
+        switch(suppression_choix){
             case 1: modifierEtudiant(); break;
             case 2: supprimerEtudiant(); break;
             case 3: return; break;
@@ -336,7 +339,7 @@ void modifierOuSupprimer(){
                 break;
         }
     }
-    while(del_or_upd < 1 || del_or_upd > 3);
+    while(suppression_choix < 1 || suppression_choix > 3);
 }
 int rechercherParUID(int uid, int low, int high){
     if(low > high){
@@ -408,6 +411,27 @@ void rechercherParDepartement(){
     }
     afficherInfosEtudiants(tmp_etudiants, counter);
 }
+
+void afficherListEtudiants(){
+    system("cls");
+    printf(COLOR_YELLOW "--------------------------------------------------------------\n");
+    printf("                 afficher lisr des etudiants                  \n");
+    printf("--------------------------------------------------------------\n" COLOR_RESET);
+    if(taille == 0){
+        printf(COLOR_RED "aucun etudiant availaible maintenant\n" COLOR_RESET);
+        return;
+    }
+    else{
+        afficherInfosEtudiants(etudiants, taille);
+    }
+}
+
+void etudiantInscris(){}
+void etudiantDansChaqueDepartement(){}
+void etudiantParNoteGeneral(){}
+void troisPremiersEtudiant(){}
+
+
 
 
 
