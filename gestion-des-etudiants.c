@@ -164,7 +164,12 @@ void ajouterEtudiant(){
         printf("entrer votre date de naisance (JJ/MM/AAAA): "); 
         scanf("%d/%d/%d", &etudiants[taille + i].date_naiss.jour, &etudiants[taille + i].date_naiss.mois, &etudiants[taille + i].date_naiss.annee);
         choisitDepartement(i);
-        printf("entrer votre notes: "); scanf("%f", &etudiants[taille + i].noteGeneral);
+        printf("--------------------------------------------------------------\n");
+        printf("entrer votre note: "); scanf("%f", &etudiants[taille + i].noteGeneral);
+        while(etudiants[taille + i].noteGeneral < 1 || etudiants[taille + i].noteGeneral > 20){
+            printf(COLOR_RED "votre note doit etre entre 1 et 20..\n" COLOR_RESET);
+            printf("entre votre note: "); scanf("%f", &etudiants[taille + i].noteGeneral);
+        }
         printf("--------------------------------------------------------------\n");
         printf(COLOR_GREEN "un nouveau etudiant a ete ajoutee sous l'identifiant %d avec success \n" COLOR_RESET, etudiants[taille + i].uid);
     }
@@ -382,7 +387,7 @@ void choisitDepartement(int indice){
         printf("--------------------------------------------------------------\n");
         printf("selectioner votre departement: "); scanf("%d", &departement_choisi);
     }
-    while(departement_choisi < 1 || departement_choisi > 5);
+    while(departement_choisi < 1 || departement_choisi > nbre_departements);
 
     strcpy(etudiants[indice].departement, departements[departement_choisi - 1]);
     
@@ -603,7 +608,7 @@ void menuDeTri(){
 void triEtudiantParNoteDesc(){
     for (int i = 0; i < taille - 1; i++) {
         for (int j = 0; j < taille - i - 1; j++) {
-            if (etudiants[j].noteGeneral > etudiants[j + 1].noteGeneral) {
+            if (etudiants[j].noteGeneral < etudiants[j + 1].noteGeneral) {
                 // Échange des éléments
                 tmp_etudiants[0] = etudiants[j];
                 etudiants[j] = etudiants[j + 1];
@@ -622,7 +627,7 @@ void triEtudiantParNoteDesc(){
 void triEtudiantParNoteAsc(){
     for (int i = 0; i < taille - 1; i++) {
         for (int j = 0; j < taille - i - 1; j++) {
-            if (etudiants[j].noteGeneral < etudiants[j + 1].noteGeneral) {
+            if (etudiants[j].noteGeneral > etudiants[j + 1].noteGeneral) {
                 // Échange des éléments
                 tmp_etudiants[0] = etudiants[j];
                 etudiants[j] = etudiants[j + 1];
@@ -642,7 +647,7 @@ void triEtudiantParNoteAsc(){
 void triEtudiantParNomDesc(){
     for (int i = 0; i < taille - 1; i++) {
         for (int j = 0; j < taille - i - 1; j++) {
-            if (strcmp(etudiants[j].nom, etudiants[j + 1].nom) > 0) {
+            if (strcmp(etudiants[j].nom, etudiants[j + 1].nom) < 0) {
                 // Échange des éléments
                 tmp_etudiants[0] = etudiants[j];
                 etudiants[j] = etudiants[j + 1];
@@ -661,7 +666,7 @@ void triEtudiantParNomDesc(){
 void triEtudiantParNomAsc(){
     for (int i = 0; i < taille - 1; i++) {
         for (int j = 0; j < taille - i - 1; j++) {
-            if (strcmp(etudiants[j].nom, etudiants[j + 1].nom) < 0) {
+            if (strcmp(etudiants[j].nom, etudiants[j + 1].nom) > 0) {
                 // Échange des éléments
                 tmp_etudiants[0] = etudiants[j];
                 etudiants[j] = etudiants[j + 1];
