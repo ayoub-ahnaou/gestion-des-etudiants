@@ -25,19 +25,24 @@ typedef struct {
 } Etudiant;
 
 Etudiant etudiants[99] = {
-    {1, "Dupont", "Marie", "Mathematiques", 12, {10, 6, 1998}},
-    {2, "Martin", "Jean", "Informatique", 10, {23, 11, 1999}},
-    {3, "Durand", "Sophie", "Physique", 8, {5, 2, 2000}},
-    {4, "Lemoine", "Paul", "Chimie", 9.2, {15, 8, 1997}},
-    {5, "Moreau", "Claire", "Biologie", 16.9, {30, 12, 1999}}
+    {1, "dupont", "marie", "Mathematiques", 12, {10, 6, 1998}},
+    {2, "martin", "jean", "Informatique", 10, {23, 11, 1999}},
+    {3, "durand", "sophie", "Physique", 8, {5, 2, 2000}},
+    {4, "lemoine", "paul", "Chimie", 9.2, {15, 8, 1997}},
+    {5, "fikrri", "hanane", "Chimie", 9.2, {15, 8, 1997}},
+    {6, "ahnaou", "ayoub", "Biologie", 16.9, {30, 12, 1999}},
+    {7, "mohammed", "amine", "Droit", 18.9, {3, 2, 2003}},
+    {8, "zouhri", "jamal", "Economique", 3.95, {1, 8, 1994}},
+    {9, "kara", "mohamed", "Chimie", 7.5, {31, 1, 2010}},
+    {10, "chaaraoui", "youssef", "Informatique", 14, {6, 5, 2020}},
 };
 
-int taille = 5;
-static int id_increment = 6;
+int taille = 10;
+static int id_increment = 11;
 
 // variable temporaire de type etudiant
 Etudiant tmp_etudiants[99];
-char * departements[20] = {"informatique", "physique", "chimie", "biologie", "droit"};
+char * departements[20] = {"Informatique", "Physique", "Chimie", "Biologie", "Droit", "Mathematiques", "Economique"};
 int nombre_departements = sizeof(nombre_departements);
 
 //TODO ==> prototype des fonctions
@@ -94,6 +99,7 @@ void modifierNomEtPrenom(int position);
 void modifierDepartement(int position);
 void modifierNote(int position);
 void modifierDateNaiss(int position);
+int nbreDepartements();
 // ... //
 
 int main(){
@@ -115,7 +121,8 @@ void menu(){
         printf("\t 4- afficher les informations des etudiants \n");
         printf("\t 5- statistiques \n");
         printf("\t 6- trie les etudiants \n");
-        printf("\t 7- quittez le programe \n\n");
+        printf("\t 7- calcul la moyenne generale \n");
+        printf("\t 8- quittez le programe \n\n");
         printf("--------------------------------------------------------------\n" COLOR_RESET);
         printf("entrez votre choix: "); scanf("%d", &choice);
         printf(COLOR_YELLOW "--------------------------------------------------------------\n" COLOR_RESET);
@@ -127,7 +134,8 @@ void menu(){
             case 4: afficherListEtudiants(); break;
             case 5: statistiques(); break;
             case 6: menuDeTri(); break;
-            case 7: 
+            case 7: moyenneGeneral(); break;
+            case 8:
                 exit(0); 
                 break;
             default:
@@ -135,7 +143,7 @@ void menu(){
                 break;
         }
     }
-    while(choice != 7);
+    while(choice != 8);
 }
 
 //  *************************** //
@@ -250,7 +258,38 @@ void afficherInfosEtudiants(Etudiant tableau[], int size){
     }
     return;
 }
-void moyenneGeneral(){}
+void moyenneGeneral(){
+    system("cls");
+    printf(COLOR_YELLOW "--------------------------------------------------------------\n");
+    printf("                      moyenne generale                        \n");
+    printf("--------------------------------------------------------------\n" COLOR_RESET);
+    if(taille == 0){
+        printf(COLOR_RED "aucun etudiant availaible maintenant\n" COLOR_RESET);
+        return;
+    }
+    else{
+        printf(COLOR_VIOLET "--------------------------------------------------------------\n");
+        int nbre_departements = nbreDepartements();
+        float moyenneGlobale = 0, sommeGlobale = 0;
+        for(int i=0; i<nbre_departements; i++){
+            float moyenne = 0, somme = 0;
+            int counter = 0; // stocker le nombre d'etudiant dans un departement commun
+            for(int j=0; j<taille; j++){
+                if(strcmp(departements[i], etudiants[j].departement) == 0){
+                    somme = somme + etudiants[j].noteGeneral;
+                    counter++;
+                }
+            }
+            sommeGlobale += somme;
+            moyenne = somme / counter;
+            printf(COLOR_VIOLET "Departement %s: " COLOR_RESET, departements[i]);
+            printf("moyenne generale %.2f \n", moyenne);
+        }
+        moyenneGlobale = sommeGlobale / taille;
+        printf("\nla moyenne globale de l'universite: %.2f\n", moyenneGlobale);
+        printf(COLOR_VIOLET "--------------------------------------------------------------\n");
+    }
+}
 void statistiques(){
     system("cls");
     printf(COLOR_YELLOW "--------------------------------------------------------------\n");
@@ -324,7 +363,7 @@ void rechercherEtudiant(){
 void triEtudiants(){}
 
 // **************************** //
-
+// calcule le nombre de departement d'une maniere dynamique
 int nbreDepartements(){
     int counter = 0;
     while(departements[counter] != NULL){
