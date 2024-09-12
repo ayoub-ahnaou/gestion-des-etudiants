@@ -25,16 +25,16 @@ typedef struct {
 } Etudiant;
 
 Etudiant etudiants[49] = {
-    {1, "dupont", "marie", "Mathematiques", 12, {10, 6, 1998}},
-    {2, "martin", "jean", "Informatique", 10, {23, 11, 1999}},
-    {3, "durand", "sophie", "Physique", 8, {5, 2, 2000}},
-    {4, "lemoine", "paul", "Chimie", 9.2, {15, 8, 1997}},
-    {5, "fikrri", "hanane", "Chimie", 9.2, {15, 8, 1997}},
-    {6, "ahnaou", "ayoub", "Biologie", 16.9, {30, 12, 1999}},
-    {7, "mohammed", "amine", "Droit", 18.9, {3, 2, 2003}},
-    {8, "zouhri", "jamal", "Economique", 3.95, {1, 8, 1994}},
-    {9, "kara", "mohamed", "Chimie", 7.5, {31, 1, 2010}},
-    {10, "chaaraoui", "youssef", "Informatique", 14, {6, 5, 2020}},
+    {1, "benali", "nadia", "Mathematiques", 12, {10, 6, 1998}},
+    {2, "el hassani", "youssef", "Informatique", 10, {23, 11, 1999}},
+    {3, "zidane", "fatiha", "Physique", 8, {5, 2, 2000}},
+    {4, "amrani", "mohamed", "Chimie", 17.2, {15, 8, 1997}},
+    {5, "bouzid", "khadija", "Chimie", 9.2, {15, 8, 1997}},
+    {6, "el maaroufi", "ahmed", "Biologie", 16.9, {30, 12, 1999}},
+    {7, "elkadiri", "amine", "Droit", 18.9, {3, 2, 2003}},
+    {8, "bouhalal", "jamal", "Économique", 3.95, {1, 8, 1994}},
+    {9, "el ghaouti", "mohamed", "Chimie", 7.5, {31, 1, 2010}},
+    {10, "achour", "youssef", "Informatique", 14, {6, 5, 2020}},
 };
 
 int taille = 10;
@@ -560,6 +560,10 @@ void etudiantParNoteGeneral(){
             counter++;
         }
     }
+    if(counter == 0){
+        printf(COLOR_RED "aucun etudiant depase la seuille %.2f \n", seuil);
+        return;
+    }
     printf("les etudiant ayant une note superieure a la seuille %.2f\n", seuil);
     afficherInfosEtudiants(tmp_etudiants, counter);
 }
@@ -637,7 +641,6 @@ void triEtudiantParNoteDesc(){
     for (int i = 0; i < taille - 1; i++) {
         for (int j = 0; j < taille - i - 1; j++) {
             if (etudiants[j].noteGeneral < etudiants[j + 1].noteGeneral) {
-                // Échange des éléments
                 tmp_etudiants[0] = etudiants[j];
                 etudiants[j] = etudiants[j + 1];
                 etudiants[j + 1] = tmp_etudiants[0];
@@ -656,7 +659,6 @@ void triEtudiantParNoteAsc(){
     for (int i = 0; i < taille - 1; i++) {
         for (int j = 0; j < taille - i - 1; j++) {
             if (etudiants[j].noteGeneral > etudiants[j + 1].noteGeneral) {
-                // Échange des éléments
                 tmp_etudiants[0] = etudiants[j];
                 etudiants[j] = etudiants[j + 1];
                 etudiants[j + 1] = tmp_etudiants[0];
@@ -676,7 +678,6 @@ void triEtudiantParNomDesc(){
     for (int i = 0; i < taille - 1; i++) {
         for (int j = 0; j < taille - i - 1; j++) {
             if (strcmp(etudiants[j].nom, etudiants[j + 1].nom) < 0) {
-                // Échange des éléments
                 tmp_etudiants[0] = etudiants[j];
                 etudiants[j] = etudiants[j + 1];
                 etudiants[j + 1] = tmp_etudiants[0];
@@ -695,7 +696,6 @@ void triEtudiantParNomAsc(){
     for (int i = 0; i < taille - 1; i++) {
         for (int j = 0; j < taille - i - 1; j++) {
             if (strcmp(etudiants[j].nom, etudiants[j + 1].nom) > 0) {
-                // Échange des éléments
                 tmp_etudiants[0] = etudiants[j];
                 etudiants[j] = etudiants[j + 1];
                 etudiants[j + 1] = tmp_etudiants[0];
